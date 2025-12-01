@@ -126,28 +126,44 @@ export default function SEOModule({ onComplete, onBack }) {
       return;
     }
 
-    // Valider le code
-    const validation = validateCode(
-      userCode,
-      currentPage.correctHTML || currentPage.html,
-      detectedErrors
-    );
+    try {
+      // Valider le code
+      const validation = validateCode(
+        userCode,
+        currentPage.correctHTML || currentPage.html,
+        detectedErrors
+      );
 
-    // Calculer le nouveau ranking
-    const newRank = calculateNewRanking(validation, ranking);
+      // Calculer le nouveau ranking
+      const newRank = calculateNewRanking(validation, ranking);
 
-    // Générer le rapport
-    const report = generateReport(validation, ranking, newRank);
+      // Générer le rapport
+      const report = generateReport(validation, ranking, newRank);
 
-    // Mettre à jour le state
-    setPreviousRanking(ranking);
-    setRanking(newRank);
-    setValidationReport(report);
-    setShowValidationFeedback(true);
-    setLastSubmittedCode(userCode); // Sauvegarder le code soumis
+      // Mettre à jour le state
+      setPreviousRanking(ranking);
+      setRanking(newRank);
+      setValidationReport(report);
+      setShowValidationFeedback(true);
+      setLastSubmittedCode(userCode); // Sauvegarder le code soumis
 
-    // Mettre à jour le score total
-    setTotalScore(prev => prev + validation.score);
+      // Mettre à jour le score total
+      setTotalScore(prev => prev + validation.score);
+    } catch (error) {
+      // Gérer les erreurs de validation
+      console.error('Erreur lors de la validation du code:', error);
+      
+      setValidationReport({
+        generalMessage: '❌ Une erreur est survenue lors de la validation de votre code.',
+        summary: { fixed: 0, partial: 0, remaining: detectedErrors.length },
+        ranking: { old: ranking, new: ranking, improvement: 0 },
+        feedback: [{
+          type: 'error',
+          message: `Erreur technique: ${error.message || 'Erreur inconnue'}. Veuillez réessayer ou contacter le support.`
+        }]
+      });
+      setShowValidationFeedback(true);
+    }
   };
 
   // Passer au tour suivant
@@ -218,6 +234,7 @@ export default function SEOModule({ onComplete, onBack }) {
                 <h3 className="text-lg font-semibold text-foreground">Ressources</h3>
                 <ul className="space-y-2 list-disc list-inside">
                   <li><strong>Budget:</strong> 100 heures de travail pour acheter des indices</li>
+                  <li><strong>Indices disponibles:</strong> 42 indices répartis sur 6 pages</li>
                   <li><strong>Objectif:</strong> Atteindre le top 10 de Google sur chaque page</li>
                   <li><strong>Pages:</strong> 6 pages à optimiser (chaque page = nouveau défi)</li>
                 </ul>
@@ -226,7 +243,7 @@ export default function SEOModule({ onComplete, onBack }) {
 
             <div className="p-5 bg-seo/10 border border-seo/50 rounded-lg">
               <p className="text-sm text-seo font-medium leading-relaxed">
-                <strong>Conseil pédagogique :</strong> Commencez par acheter des indices pour détecter les erreurs critiques.
+                <strong>Conseil :</strong> Commencez par acheter des indices pour détecter les erreurs critiques.
                 Ces erreurs ont le plus d'impact sur votre référencement.
               </p>
             </div>

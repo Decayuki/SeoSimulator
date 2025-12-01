@@ -115,8 +115,7 @@ export default function App() {
 
           {/* Footer info */}
           <div className="text-center text-sm text-muted-foreground mt-8">
-            <p>Durée estimée : 45-60 minutes par module</p>
-            <p className="mt-2">Conçu pour l'apprentissage du marketing digital</p>
+            <p>Fait avec sadisme par ton professeur ❤️</p>
           </div>
         </div>
       </div>

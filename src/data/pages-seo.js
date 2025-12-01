@@ -108,7 +108,8 @@ export const SEO_PAGES = {
         title: 'Balise <title> manquante',
         description: 'La balise title est essentielle. Elle apparaît dans les résultats de recherche et dans l\'onglet du navigateur.',
         impact: -10,
-        fixCost: 1,
+        fixCost: 5,
+        line: 19,
         solution: '<title>TechShop.fr - Boutique High-Tech & Électronique | Livraison Rapide</title>'
       },
       {
@@ -117,7 +118,8 @@ export const SEO_PAGES = {
         title: 'Meta description manquante',
         description: 'Sans meta description, Google génère un snippet aléatoire depuis votre contenu.',
         impact: -8,
-        fixCost: 1,
+        fixCost: 5,
+        line: 20,
         solution: '<meta name="description" content="...">'
       },
       {
@@ -126,7 +128,8 @@ export const SEO_PAGES = {
         title: 'Pas de balise H1',
         description: 'Le H1 est crucial pour indiquer le sujet principal de la page à Google.',
         impact: -7,
-        fixCost: 1,
+        fixCost: 5,
+        line: 23,
         solution: '<h1>Votre Boutique High-Tech de Confiance</h1>'
       },
       {
@@ -135,7 +138,8 @@ export const SEO_PAGES = {
         title: '4 images sans attribut alt',
         description: 'Les attributs alt aident Google à comprendre vos images et améliorent l\'accessibilité.',
         impact: -6,
-        fixCost: 1,
+        fixCost: 4,
+        line: 28,
         solution: 'Ajouter des attributs alt descriptifs à toutes les images'
       },
       {
@@ -144,7 +148,8 @@ export const SEO_PAGES = {
         title: 'Contenu trop court',
         description: 'Environ 30 mots seulement. Recommandé : 300+ mots pour un bon référencement.',
         impact: -5,
-        fixCost: 2,
+        fixCost: 7,
+        line: 33,
         solution: 'Enrichir le contenu avec plus d\'informations utiles'
       },
       {
@@ -153,7 +158,8 @@ export const SEO_PAGES = {
         title: 'Lien avec texte "Cliquez ici"',
         description: 'Utilisez des textes de liens descriptifs pour améliorer le SEO.',
         impact: -2,
-        fixCost: 0.5,
+        fixCost: 2,
+        line: 38,
         solution: '<a href="/products">Découvrir notre catalogue de produits</a>'
       },
       {
@@ -162,7 +168,8 @@ export const SEO_PAGES = {
         title: 'Pas de structure HTML5 sémantique',
         description: 'Les balises <header>, <main>, <footer> améliorent la structure.',
         impact: -3,
-        fixCost: 1,
+        fixCost: 3,
+        line: 49,
         solution: 'Utiliser les balises sémantiques HTML5'
       }
     ]
@@ -297,7 +304,8 @@ export const SEO_PAGES = {
         title: 'Title trop court et pas optimisé',
         description: 'Le title "iPhone" est trop générique. Il devrait contenir le modèle, la capacité et le prix.',
         impact: -8,
-        fixCost: 1,
+        fixCost: 5,
+        line: 5,
         solution: '<title>iPhone 15 Pro 256GB Titane Noir - Prix 999€ | TechShop.fr</title>'
       },
       {
@@ -306,7 +314,8 @@ export const SEO_PAGES = {
         title: 'Meta description trop courte',
         description: 'Seulement 18 caractères. Idéal : 120-155 caractères.',
         impact: -6,
-        fixCost: 1,
+        fixCost: 4,
+        line: 6,
         solution: 'Rédiger une description détaillée avec caractéristiques clés'
       },
       {
@@ -315,7 +324,8 @@ export const SEO_PAGES = {
         title: 'Pas de balisage Schema.org Product',
         description: 'Le Schema.org permet d\'afficher le prix, la dispo et les avis dans Google.',
         impact: -10,
-        fixCost: 2,
+        fixCost: 8,
+        line: 10,
         solution: 'Ajouter le JSON-LD Schema.org Product'
       },
       {
@@ -324,7 +334,8 @@ export const SEO_PAGES = {
         title: '3 images produit sans alt',
         description: 'Les alt des images produit sont cruciaux pour le SEO image.',
         impact: -5,
-        fixCost: 1,
+        fixCost: 4,
+        line: 13,
         solution: 'Décrire précisément chaque vue du produit'
       },
       {
@@ -333,7 +344,8 @@ export const SEO_PAGES = {
         title: 'Description produit insuffisante',
         description: 'Description trop courte. Détaillez les caractéristiques pour améliorer le SEO.',
         impact: -7,
-        fixCost: 2,
+        fixCost: 7,
+        line: 15,
         solution: 'Rédiger 200-300 mots avec caractéristiques détaillées'
       },
       {
@@ -342,7 +354,8 @@ export const SEO_PAGES = {
         title: 'Pas de fil d\'Ariane (breadcrumb)',
         description: 'Le breadcrumb aide Google à comprendre la structure du site.',
         impact: -3,
-        fixCost: 1,
+        fixCost: 3,
+        line: 12,
         solution: 'Ajouter navigation: Accueil > Smartphones > iPhone 15 Pro'
       },
       {
@@ -351,7 +364,8 @@ export const SEO_PAGES = {
         title: 'Pas d\'avis clients',
         description: 'Les avis clients améliorent la confiance et le SEO.',
         impact: -4,
-        fixCost: 1,
+        fixCost: 3,
+        line: 15,
         solution: 'Afficher les notes et avis clients'
       }
     ]
@@ -425,7 +439,7 @@ export const SEO_PAGES = {
         title: 'Title trop générique',
         description: 'Le title manque de mots-clés et de contexte (année, marque du site).',
         impact: -5,
-        fixCost: 1,
+        fixCost: 4,
         line: 5,
         solution: '<title>Comment Choisir son Smartphone en 2024 - Guide Complet | TechShop</title>'
       },
@@ -435,7 +449,7 @@ export const SEO_PAGES = {
         title: 'Meta description trop courte',
         description: '40 caractères seulement. Idéal : 120-155 caractères.',
         impact: -4,
-        fixCost: 1,
+        fixCost: 4,
         line: 6,
         solution: 'Rédiger description détaillée avec mots-clés'
       },
@@ -445,7 +459,7 @@ export const SEO_PAGES = {
         title: 'Pas de balise <article>',
         description: 'Un article de blog devrait utiliser la balise sémantique <article>.',
         impact: -2,
-        fixCost: 0.5,
+        fixCost: 2,
         line: 14,
         solution: 'Encadrer le contenu avec <article></article>'
       },
@@ -455,7 +469,7 @@ export const SEO_PAGES = {
         title: 'Contenu trop court',
         description: 'Environ 15 mots. Un article de blog doit faire 500+ mots minimum.',
         impact: -8,
-        fixCost: 3,
+        fixCost: 8,
         line: 15,
         solution: 'Rédiger un contenu complet avec plusieurs sections'
       },
@@ -465,7 +479,7 @@ export const SEO_PAGES = {
         title: 'Pas de sous-titres H2',
         description: 'Structurez votre contenu avec des H2 pour le SEO et la lisibilité.',
         impact: -5,
-        fixCost: 1,
+        fixCost: 4,
         line: 15,
         solution: 'Ajouter des H2 pour chaque section'
       },
@@ -475,7 +489,7 @@ export const SEO_PAGES = {
         title: 'Pas de liens internes',
         description: 'Les liens internes renforcent votre maillage SEO.',
         impact: -3,
-        fixCost: 0.5,
+        fixCost: 2,
         line: 15,
         solution: 'Ajouter des liens vers d\'autres pages du site'
       }
@@ -605,7 +619,7 @@ export const SEO_PAGES = {
         title: 'Title trop court',
         description: 'Le title "Contact" est trop générique. Ajoutez le nom de votre entreprise et des mots-clés.',
         impact: -5,
-        fixCost: 1,
+        fixCost: 4,
         line: 5,
         solution: '<title>Nous Contacter - TechShop.fr | Support Client 7j/7</title>'
       },
@@ -615,7 +629,7 @@ export const SEO_PAGES = {
         title: 'Meta description manquante',
         description: 'Ajoutez une meta description mentionnant vos coordonnées et horaires.',
         impact: -4,
-        fixCost: 1,
+        fixCost: 4,
         line: 6,
         solution: '<meta name="description" content="Contactez TechShop : support client disponible 7j/7...">'
       },
@@ -625,7 +639,7 @@ export const SEO_PAGES = {
         title: 'Pas de Schema LocalBusiness',
         description: 'Le Schema LocalBusiness aide Google à afficher vos coordonnées dans les résultats.',
         impact: -8,
-        fixCost: 2,
+        fixCost: 8,
         line: 7,
         solution: 'Ajouter JSON-LD Schema LocalBusiness avec adresse et contact'
       },
@@ -635,7 +649,7 @@ export const SEO_PAGES = {
         title: 'Informations de contact non structurées',
         description: 'Utilisez des balises sémantiques et microdata pour structurer vos coordonnées.',
         impact: -3,
-        fixCost: 1,
+        fixCost: 3,
         line: 10,
         solution: 'Utiliser itemscope/itemprop pour structurer les données'
       },
@@ -645,7 +659,7 @@ export const SEO_PAGES = {
         title: 'Formulaire sans labels',
         description: 'Les champs de formulaire doivent avoir des <label> pour l\'accessibilité et le SEO.',
         impact: -2,
-        fixCost: 0.5,
+        fixCost: 2,
         line: 16,
         solution: 'Ajouter <label for="..."> pour chaque champ'
       }
@@ -761,7 +775,7 @@ export const SEO_PAGES = {
         title: 'Title trop court et générique',
         description: 'Le title "Smartphones" manque de contexte. Ajoutez le nombre de produits, les marques et le nom du site.',
         impact: -7,
-        fixCost: 1,
+        fixCost: 5,
         line: 5,
         solution: '<title>Smartphones - Plus de 50 Modèles Android & iPhone | TechShop.fr</title>'
       },
@@ -771,7 +785,7 @@ export const SEO_PAGES = {
         title: 'Meta description manquante',
         description: 'Une page catégorie doit avoir une description attrayante mentionnant les marques et prix.',
         impact: -6,
-        fixCost: 1,
+        fixCost: 5,
         line: 6,
         solution: 'Ajouter meta description avec marques, gamme de prix et USP'
       },
@@ -781,7 +795,7 @@ export const SEO_PAGES = {
         title: 'H2 utilisé au lieu de H1',
         description: 'Chaque page doit avoir un H1 unique. Remplacez le H2 par un H1.',
         impact: -5,
-        fixCost: 0.5,
+        fixCost: 4,
         line: 9,
         solution: '<h1>Smartphones</h1>'
       },
@@ -791,7 +805,7 @@ export const SEO_PAGES = {
         title: 'Contenu de catégorie insuffisant',
         description: 'Les pages catégories doivent avoir du contenu descriptif (100+ mots) pour le SEO.',
         impact: -6,
-        fixCost: 2,
+        fixCost: 7,
         line: 12,
         solution: 'Ajouter paragraphes descriptifs sur la catégorie'
       },
@@ -801,7 +815,7 @@ export const SEO_PAGES = {
         title: 'Pas de fil d\'Ariane',
         description: 'Un breadcrumb aide les utilisateurs et Google à comprendre la structure du site.',
         impact: -3,
-        fixCost: 1,
+        fixCost: 3,
         line: 8,
         solution: 'Ajouter breadcrumb : Accueil > Smartphones'
       },
@@ -811,7 +825,7 @@ export const SEO_PAGES = {
         title: 'Images produits sans alt',
         description: 'Les vignettes produits doivent avoir des alt descriptifs incluant la marque et le modèle.',
         impact: -4,
-        fixCost: 1,
+        fixCost: 4,
         line: 18,
         solution: 'Ajouter alt="Marque Modèle - Description" à chaque image'
       },
@@ -821,7 +835,7 @@ export const SEO_PAGES = {
         title: 'Pas de système de filtres',
         description: 'Les filtres améliorent l\'UX et peuvent créer des URLs indexables.',
         impact: -2,
-        fixCost: 1,
+        fixCost: 2,
         line: 14,
         solution: 'Ajouter filtres par marque, prix, caractéristiques'
       }
@@ -919,7 +933,7 @@ export const SEO_PAGES = {
         title: 'Title avec faute et pas optimisé',
         description: 'Faute : "A propos" au lieu de "À propos". Le title manque aussi de contexte et mots-clés.',
         impact: -5,
-        fixCost: 1,
+        fixCost: 4,
         line: 5,
         solution: '<title>À Propos de TechShop - Notre Histoire & Engagement | Depuis 2015</title>'
       },
@@ -929,7 +943,7 @@ export const SEO_PAGES = {
         title: 'Meta description manquante',
         description: 'La page "À propos" doit avoir une meta description présentant l\'histoire et les valeurs.',
         impact: -4,
-        fixCost: 1,
+        fixCost: 4,
         line: 6,
         solution: 'Ajouter meta description avec histoire, mission et année de création'
       },
@@ -939,7 +953,7 @@ export const SEO_PAGES = {
         title: 'Pas de Schema Organization',
         description: 'Le Schema Organization aide Google à comprendre votre entreprise (date création, réseaux sociaux, etc.).',
         impact: -7,
-        fixCost: 2,
+        fixCost: 8,
         line: 7,
         solution: 'Ajouter JSON-LD Schema Organization'
       },
@@ -949,7 +963,7 @@ export const SEO_PAGES = {
         title: 'Contenu très insuffisant',
         description: 'Une page "À propos" doit détailler l\'histoire, la mission, les valeurs et l\'équipe (200+ mots).',
         impact: -8,
-        fixCost: 3,
+        fixCost: 8,
         line: 11,
         solution: 'Développer : histoire, mission, valeurs, équipe, chiffres clés'
       }
