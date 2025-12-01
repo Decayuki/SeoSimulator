@@ -234,6 +234,7 @@ export default function SEOModule({ onComplete, onBack }) {
                 <h3 className="text-lg font-semibold text-foreground">Ressources</h3>
                 <ul className="space-y-2 list-disc list-inside">
                   <li><strong>Budget:</strong> 100 heures de travail pour acheter des indices</li>
+                  <li><strong>Indices disponibles:</strong> 42 indices répartis sur 6 pages</li>
                   <li><strong>Objectif:</strong> Atteindre le top 10 de Google sur chaque page</li>
                   <li><strong>Pages:</strong> 6 pages à optimiser (chaque page = nouveau défi)</li>
                 </ul>
@@ -242,7 +243,7 @@ export default function SEOModule({ onComplete, onBack }) {
 
             <div className="p-5 bg-seo/10 border border-seo/50 rounded-lg">
               <p className="text-sm text-seo font-medium leading-relaxed">
-                <strong>Conseil pédagogique :</strong> Commencez par acheter des indices pour détecter les erreurs critiques.
+                <strong>Conseil :</strong> Commencez par acheter des indices pour détecter les erreurs critiques.
                 Ces erreurs ont le plus d'impact sur votre référencement.
               </p>
             </div>
