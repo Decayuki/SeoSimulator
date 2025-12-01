@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { Code, RotateCcw, Check, Lock } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
@@ -40,6 +40,8 @@ export default function CodeEditor({
   const [passwordError, setPasswordError] = useState('');
   const [showCorrectCode, setShowCorrectCode] = useState(false);
   const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+  const decorationsRef = useRef([]); // Stocker les IDs des décorations
 
   // Mot de passe prof (en production, ceci devrait être configurable)
   const PROFESSOR_PASSWORD = 'prof2024';
@@ -47,33 +49,47 @@ export default function CodeEditor({
   // Gérer le montage de l'éditeur
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
+    monacoRef.current = monaco;
 
     // Configurer les décorations pour surligner les erreurs révélées
     updateErrorDecorations(editor, monaco);
   };
 
+  // Mettre à jour les décorations d'erreur quand purchasedHints ou errors changent
+  useEffect(() => {
+    if (editorRef.current && monacoRef.current) {
+      updateErrorDecorations(editorRef.current, monacoRef.current);
+    }
+  }, [purchasedHints, errors]);
+
   // Mettre à jour les décorations d'erreur
   const updateErrorDecorations = (editor, monaco) => {
     if (!editor || !monaco) return;
 
-    const decorations = purchasedHints.map(hintId => {
+    // Créer les nouvelles décorations
+    const newDecorations = purchasedHints.map(hintId => {
       const error = errors.find(e => e.id === hintId);
-      if (!error) return null;
+      if (!error || !error.line) return null;
 
       return {
-        range: new monaco.Range(error.line, 1, error.line, 1),
+        range: new monaco.Range(error.line, 1, error.line, 1000), // Ligne entière
         options: {
           isWholeLine: true,
           className: 'error-line-highlight',
           glyphMarginClassName: 'error-line-glyph',
           hoverMessage: {
-            value: `**${error.title}**\n\n${error.description}`
+            value: `**${error.title}**\n\n${error.description}\n\nImpact: ${error.impact} points`
+          },
+          minimap: {
+            color: '#ef4444',
+            position: 1
           }
         }
       };
     }).filter(Boolean);
 
-    editor.createDecorationsCollection(decorations);
+    // Mettre à jour les décorations en utilisant deltaDecorations
+    decorationsRef.current = editor.deltaDecorations(decorationsRef.current, newDecorations);
   };
 
   // Réinitialiser le code
@@ -294,12 +310,17 @@ export default function CodeEditor({
       {/* Styles personnalisés pour les décorations d'erreur */}
       <style>{`
         .error-line-highlight {
-          background: rgba(239, 68, 68, 0.1);
+          background: rgba(239, 68, 68, 0.15) !important;
+          border-left: 3px solid rgba(239, 68, 68, 0.6) !important;
+          padding-left: 4px !important;
         }
         .error-line-glyph {
-          background: rgba(239, 68, 68, 0.5);
+          background: rgba(239, 68, 68, 0.8) !important;
           width: 4px !important;
-          margin-left: 3px;
+          margin-left: 3px !important;
+        }
+        .monaco-editor .error-line-highlight {
+          background: rgba(239, 68, 68, 0.15) !important;
         }
       `}</style>
     </>

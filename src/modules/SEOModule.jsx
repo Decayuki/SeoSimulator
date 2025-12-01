@@ -126,28 +126,44 @@ export default function SEOModule({ onComplete, onBack }) {
       return;
     }
 
-    // Valider le code
-    const validation = validateCode(
-      userCode,
-      currentPage.correctHTML || currentPage.html,
-      detectedErrors
-    );
+    try {
+      // Valider le code
+      const validation = validateCode(
+        userCode,
+        currentPage.correctHTML || currentPage.html,
+        detectedErrors
+      );
 
-    // Calculer le nouveau ranking
-    const newRank = calculateNewRanking(validation, ranking);
+      // Calculer le nouveau ranking
+      const newRank = calculateNewRanking(validation, ranking);
 
-    // Générer le rapport
-    const report = generateReport(validation, ranking, newRank);
+      // Générer le rapport
+      const report = generateReport(validation, ranking, newRank);
 
-    // Mettre à jour le state
-    setPreviousRanking(ranking);
-    setRanking(newRank);
-    setValidationReport(report);
-    setShowValidationFeedback(true);
-    setLastSubmittedCode(userCode); // Sauvegarder le code soumis
+      // Mettre à jour le state
+      setPreviousRanking(ranking);
+      setRanking(newRank);
+      setValidationReport(report);
+      setShowValidationFeedback(true);
+      setLastSubmittedCode(userCode); // Sauvegarder le code soumis
 
-    // Mettre à jour le score total
-    setTotalScore(prev => prev + validation.score);
+      // Mettre à jour le score total
+      setTotalScore(prev => prev + validation.score);
+    } catch (error) {
+      // Gérer les erreurs de validation
+      console.error('Erreur lors de la validation du code:', error);
+      
+      setValidationReport({
+        generalMessage: '❌ Une erreur est survenue lors de la validation de votre code.',
+        summary: { fixed: 0, partial: 0, remaining: detectedErrors.length },
+        ranking: { old: ranking, new: ranking, improvement: 0 },
+        feedback: [{
+          type: 'error',
+          message: `Erreur technique: ${error.message || 'Erreur inconnue'}. Veuillez réessayer ou contacter le support.`
+        }]
+      });
+      setShowValidationFeedback(true);
+    }
   };
 
   // Passer au tour suivant

@@ -109,6 +109,7 @@ export const SEO_PAGES = {
         description: 'La balise title est essentielle. Elle apparaît dans les résultats de recherche et dans l\'onglet du navigateur.',
         impact: -10,
         fixCost: 1,
+        line: 19,
         solution: '<title>TechShop.fr - Boutique High-Tech & Électronique | Livraison Rapide</title>'
       },
       {
@@ -118,6 +119,7 @@ export const SEO_PAGES = {
         description: 'Sans meta description, Google génère un snippet aléatoire depuis votre contenu.',
         impact: -8,
         fixCost: 1,
+        line: 20,
         solution: '<meta name="description" content="...">'
       },
       {
@@ -127,6 +129,7 @@ export const SEO_PAGES = {
         description: 'Le H1 est crucial pour indiquer le sujet principal de la page à Google.',
         impact: -7,
         fixCost: 1,
+        line: 23,
         solution: '<h1>Votre Boutique High-Tech de Confiance</h1>'
       },
       {
@@ -136,6 +139,7 @@ export const SEO_PAGES = {
         description: 'Les attributs alt aident Google à comprendre vos images et améliorent l\'accessibilité.',
         impact: -6,
         fixCost: 1,
+        line: 28,
         solution: 'Ajouter des attributs alt descriptifs à toutes les images'
       },
       {
@@ -145,6 +149,7 @@ export const SEO_PAGES = {
         description: 'Environ 30 mots seulement. Recommandé : 300+ mots pour un bon référencement.',
         impact: -5,
         fixCost: 2,
+        line: 33,
         solution: 'Enrichir le contenu avec plus d\'informations utiles'
       },
       {
@@ -154,6 +159,7 @@ export const SEO_PAGES = {
         description: 'Utilisez des textes de liens descriptifs pour améliorer le SEO.',
         impact: -2,
         fixCost: 0.5,
+        line: 38,
         solution: '<a href="/products">Découvrir notre catalogue de produits</a>'
       },
       {
@@ -163,6 +169,7 @@ export const SEO_PAGES = {
         description: 'Les balises <header>, <main>, <footer> améliorent la structure.',
         impact: -3,
         fixCost: 1,
+        line: 49,
         solution: 'Utiliser les balises sémantiques HTML5'
       }
     ]
@@ -298,6 +305,7 @@ export const SEO_PAGES = {
         description: 'Le title "iPhone" est trop générique. Il devrait contenir le modèle, la capacité et le prix.',
         impact: -8,
         fixCost: 1,
+        line: 5,
         solution: '<title>iPhone 15 Pro 256GB Titane Noir - Prix 999€ | TechShop.fr</title>'
       },
       {
@@ -307,6 +315,7 @@ export const SEO_PAGES = {
         description: 'Seulement 18 caractères. Idéal : 120-155 caractères.',
         impact: -6,
         fixCost: 1,
+        line: 6,
         solution: 'Rédiger une description détaillée avec caractéristiques clés'
       },
       {
@@ -316,6 +325,7 @@ export const SEO_PAGES = {
         description: 'Le Schema.org permet d\'afficher le prix, la dispo et les avis dans Google.',
         impact: -10,
         fixCost: 2,
+        line: 10,
         solution: 'Ajouter le JSON-LD Schema.org Product'
       },
       {
@@ -325,6 +335,7 @@ export const SEO_PAGES = {
         description: 'Les alt des images produit sont cruciaux pour le SEO image.',
         impact: -5,
         fixCost: 1,
+        line: 13,
         solution: 'Décrire précisément chaque vue du produit'
       },
       {
@@ -334,6 +345,7 @@ export const SEO_PAGES = {
         description: 'Description trop courte. Détaillez les caractéristiques pour améliorer le SEO.',
         impact: -7,
         fixCost: 2,
+        line: 15,
         solution: 'Rédiger 200-300 mots avec caractéristiques détaillées'
       },
       {
@@ -343,6 +355,7 @@ export const SEO_PAGES = {
         description: 'Le breadcrumb aide Google à comprendre la structure du site.',
         impact: -3,
         fixCost: 1,
+        line: 12,
         solution: 'Ajouter navigation: Accueil > Smartphones > iPhone 15 Pro'
       },
       {
@@ -352,6 +365,7 @@ export const SEO_PAGES = {
         description: 'Les avis clients améliorent la confiance et le SEO.',
         impact: -4,
         fixCost: 1,
+        line: 15,
         solution: 'Afficher les notes et avis clients'
       }
     ]

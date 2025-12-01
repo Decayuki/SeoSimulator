@@ -153,6 +153,18 @@ function checkErrorFixed(error, userCode, correctCode) {
     return checkInternalLinks(userCode, correctCode, error);
   }
 
+  if (errorId.includes('review') || errorId.includes('rating')) {
+    return checkReviews(userCode, correctCode, error);
+  }
+
+  if (errorId.includes('time') || errorId.includes('datetime')) {
+    return checkTimeTag(userCode, correctCode, error);
+  }
+
+  if (errorId.includes('form') || errorId.includes('label') || errorId.includes('accessibility')) {
+    return checkFormLabels(userCode, correctCode, error);
+  }
+
   // Vérification générique par défaut
   return checkGenericFix(userCode, correctCode, error);
 }
@@ -317,21 +329,60 @@ function checkSemanticHTML(userCode, correctCode, error) {
 }
 
 function checkSchemaMarkup(userCode, correctCode, error) {
-  const hasSchema = userCode.includes('itemscope') || userCode.includes('schema.org');
+  // Vérifier la présence de Schema.org (JSON-LD ou microdata)
+  const hasJsonLd = userCode.includes('application/ld+json') || userCode.includes('@type');
+  const hasMicrodata = userCode.includes('itemscope') || userCode.includes('itemtype');
+  const hasSchemaOrg = userCode.includes('schema.org');
 
-  if (!hasSchema) {
-    return { fixed: false, partial: false, reason: 'Aucun Schema.org markup trouvé' };
+  if (!hasJsonLd && !hasMicrodata && !hasSchemaOrg) {
+    return { fixed: false, partial: false, reason: 'Aucun Schema.org markup trouvé (JSON-LD ou microdata)' };
+  }
+
+  // Vérifier le type de schema selon l'erreur
+  if (error.id.includes('product')) {
+    const hasProduct = userCode.includes('"@type": "Product"') || 
+                      userCode.includes('itemtype="Product"') ||
+                      userCode.includes('schema.org/Product');
+    if (!hasProduct) {
+      return { fixed: false, partial: true, reason: 'Schema.org trouvé mais pas de type Product' };
+    }
+  } else if (error.id.includes('localbusiness') || error.id.includes('contact')) {
+    const hasLocalBusiness = userCode.includes('"@type": "LocalBusiness"') ||
+                            userCode.includes('itemtype="LocalBusiness"') ||
+                            userCode.includes('schema.org/LocalBusiness');
+    if (!hasLocalBusiness) {
+      return { fixed: false, partial: true, reason: 'Schema.org trouvé mais pas de type LocalBusiness' };
+    }
+  } else if (error.id.includes('organization') || error.id.includes('about')) {
+    const hasOrganization = userCode.includes('"@type": "Organization"') ||
+                           userCode.includes('itemtype="Organization"') ||
+                           userCode.includes('schema.org/Organization');
+    if (!hasOrganization) {
+      return { fixed: false, partial: true, reason: 'Schema.org trouvé mais pas de type Organization' };
+    }
   }
 
   return { fixed: true, partial: false, confidence: 1.0 };
 }
 
 function checkBreadcrumb(userCode, correctCode, error) {
-  const hasBreadcrumb = userCode.includes('breadcrumb') ||
-                       (userCode.includes('<nav') && userCode.includes('<ol'));
+  // Vérifier la présence d'un breadcrumb sémantique
+  const hasBreadcrumbNav = userCode.includes('aria-label="breadcrumb"') ||
+                          userCode.includes('aria-label="Breadcrumb"') ||
+                          (userCode.includes('<nav') && userCode.includes('breadcrumb'));
+  
+  // Vérifier la structure avec <ol> (liste ordonnée)
+  const hasBreadcrumbList = userCode.includes('<ol') && userCode.includes('breadcrumb');
+  
+  // Vérifier la présence de liens dans le breadcrumb
+  const hasBreadcrumbLinks = hasBreadcrumbNav && (userCode.match(/<a[^>]*>/g) || []).length >= 2;
 
-  if (!hasBreadcrumb) {
-    return { fixed: false, partial: false, reason: 'Fil d\'ariane (breadcrumb) non trouvé' };
+  if (!hasBreadcrumbNav && !hasBreadcrumbList) {
+    return { fixed: false, partial: false, reason: 'Fil d\'ariane (breadcrumb) non trouvé. Utilisez <nav aria-label="Breadcrumb">' };
+  }
+
+  if (!hasBreadcrumbLinks) {
+    return { fixed: false, partial: true, reason: 'Breadcrumb trouvé mais manque de liens de navigation' };
   }
 
   return { fixed: true, partial: false, confidence: 1.0 };
@@ -375,6 +426,119 @@ function checkInternalLinks(userCode, correctCode, error) {
 
   if (internalLinks.length < 2) {
     return { fixed: false, partial: true, reason: 'Pas assez de liens internes (minimum 2 recommandés)' };
+  }
+
+  return { fixed: true, partial: false, confidence: 1.0 };
+}
+
+function checkReviews(userCode, correctCode, error) {
+  // Vérifier la présence d'avis clients
+  const hasReviews = userCode.includes('avis') ||
+                     userCode.includes('review') ||
+                     userCode.includes('rating') ||
+                     userCode.includes('note') ||
+                     userCode.includes('étoile') ||
+                     userCode.includes('star') ||
+                     userCode.includes('AggregateRating') ||
+                     userCode.includes('Review');
+
+  if (!hasReviews) {
+    return { fixed: false, partial: false, reason: 'Aucun avis client trouvé. Ajoutez des avis ou notes clients.' };
+  }
+
+  // Vérifier si c'est dans Schema.org (meilleure pratique)
+  const hasSchemaReview = userCode.includes('AggregateRating') || userCode.includes('Review');
+  if (hasSchemaReview) {
+    return { fixed: true, partial: false, confidence: 1.0 };
+  }
+
+  // Sinon, vérifier qu'il y a au moins du texte d'avis
+  const reviewText = userCode.match(/(\d+[.,]\d+|\d+)\s*\/\s*5|(\d+)\s*étoile|(\d+)\s*star/i);
+  if (reviewText) {
+    return { fixed: true, partial: false, confidence: 0.8 };
+  }
+
+  return { fixed: false, partial: true, reason: 'Avis trouvé mais format non optimal. Utilisez Schema.org AggregateRating.' };
+}
+
+function checkTimeTag(userCode, correctCode, error) {
+  // Vérifier la présence de la balise <time>
+  const timeRegex = /<time[^>]*>/i;
+  const timeMatch = userCode.match(timeRegex);
+
+  if (!timeMatch) {
+    return { fixed: false, partial: false, reason: 'Balise <time> manquante' };
+  }
+
+  // Vérifier que l'attribut datetime est présent
+  const datetimeRegex = /<time[^>]*datetime=["']([^"']+)["']/i;
+  const datetimeMatch = userCode.match(datetimeRegex);
+
+  if (!datetimeMatch) {
+    return { fixed: false, partial: true, reason: 'Balise <time> trouvée mais attribut datetime manquant' };
+  }
+
+  // Vérifier que la date est valide (format ISO ou similaire)
+  const datetimeValue = datetimeMatch[1];
+  const isoDateRegex = /^\d{4}-\d{2}-\d{2}/;
+  if (!isoDateRegex.test(datetimeValue)) {
+    return { fixed: false, partial: true, reason: 'Attribut datetime présent mais format non valide (utilisez YYYY-MM-DD)' };
+  }
+
+  return { fixed: true, partial: false, confidence: 1.0 };
+}
+
+function checkFormLabels(userCode, correctCode, error) {
+  // Trouver tous les champs de formulaire
+  const inputRegex = /<(input|textarea|select)[^>]*>/gi;
+  const formFields = [...userCode.matchAll(inputRegex)];
+
+  if (formFields.length === 0) {
+    return { fixed: false, partial: false, reason: 'Aucun champ de formulaire trouvé' };
+  }
+
+  let fieldsWithLabels = 0;
+  let fieldsWithAria = 0;
+
+  formFields.forEach(field => {
+    const fieldTag = field[0];
+    const fieldId = fieldTag.match(/id=["']([^"']+)["']/i);
+    const fieldName = fieldTag.match(/name=["']([^"']+)["']/i);
+
+    // Vérifier si le champ a un label associé via for/id
+    if (fieldId) {
+      const labelRegex = new RegExp(`<label[^>]*for=["']${fieldId[1]}["']`, 'i');
+      if (userCode.match(labelRegex)) {
+        fieldsWithLabels++;
+      }
+    }
+
+    // Vérifier si le champ est dans un <label>
+    const fieldIndex = userCode.indexOf(fieldTag);
+    const beforeField = userCode.substring(Math.max(0, fieldIndex - 200), fieldIndex);
+    if (beforeField.includes('<label')) {
+      fieldsWithLabels++;
+    }
+
+    // Vérifier les attributs aria-label ou aria-labelledby
+    if (fieldTag.includes('aria-label') || fieldTag.includes('aria-labelledby')) {
+      fieldsWithAria++;
+    }
+  });
+
+  const totalFields = formFields.length;
+  const labeledFields = fieldsWithLabels + fieldsWithAria;
+
+  if (labeledFields === 0) {
+    return { fixed: false, partial: false, reason: 'Aucun champ de formulaire n\'a de label associé. Ajoutez des <label> ou aria-label.' };
+  }
+
+  if (labeledFields < totalFields) {
+    return { 
+      fixed: false, 
+      partial: true, 
+      reason: `${labeledFields}/${totalFields} champ(s) ont un label. Tous les champs doivent avoir un label.` 
+    };
   }
 
   return { fixed: true, partial: false, confidence: 1.0 };
