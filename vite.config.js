@@ -10,5 +10,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/seo-simulator/',
+  // Use root base path for Vercel; override with VITE_BASE_PATH for static hosting
+  base: process.env.VITE_BASE_PATH || '/',
 })
