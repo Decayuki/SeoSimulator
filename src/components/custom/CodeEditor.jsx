@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Editor from '@monaco-editor/react';
-import { Code, RotateCcw, Check, Lock } from 'lucide-react';
+import { Code, RotateCcw, Check, Lock, GripVertical } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -39,12 +39,20 @@ export default function CodeEditor({
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showCorrectCode, setShowCorrectCode] = useState(false);
+  const [editorHeight, setEditorHeight] = useState(500); // Hauteur initiale
+  const [isResizing, setIsResizing] = useState(false);
   const editorRef = useRef(null);
   const monacoRef = useRef(null);
   const decorationsRef = useRef([]); // Stocker les IDs des décorations
+  const resizeStartY = useRef(0);
+  const resizeStartHeight = useRef(500);
 
   // Mot de passe prof (en production, ceci devrait être configurable)
   const PROFESSOR_PASSWORD = 'prof2024';
+
+  // Constantes pour le redimensionnement
+  const MIN_HEIGHT = 300;
+  const MAX_HEIGHT = 1200;
 
   // Gérer le montage de l'éditeur
   const handleEditorDidMount = (editor, monaco) => {
@@ -61,6 +69,44 @@ export default function CodeEditor({
       updateErrorDecorations(editorRef.current, monacoRef.current);
     }
   }, [purchasedHints, errors]);
+
+  // Gérer le redimensionnement
+  const handleResizeMove = useCallback((e) => {
+    const deltaY = e.clientY - resizeStartY.current;
+    const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, resizeStartHeight.current + deltaY));
+    setEditorHeight(newHeight);
+  }, []);
+
+  const handleResizeEnd = useCallback(() => {
+    setIsResizing(false);
+    document.removeEventListener('mousemove', handleResizeMove);
+    document.removeEventListener('mouseup', handleResizeEnd);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }, [handleResizeMove]);
+
+  const handleResizeStart = useCallback((e) => {
+    e.preventDefault();
+    setIsResizing(true);
+    resizeStartY.current = e.clientY;
+    resizeStartHeight.current = editorHeight;
+    
+    // Ajouter les event listeners globaux
+    document.addEventListener('mousemove', handleResizeMove);
+    document.addEventListener('mouseup', handleResizeEnd);
+    document.body.style.cursor = 'ns-resize';
+    document.body.style.userSelect = 'none';
+  }, [editorHeight, handleResizeMove, handleResizeEnd]);
+
+  // Nettoyer les event listeners au démontage
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleResizeMove);
+      document.removeEventListener('mouseup', handleResizeEnd);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [handleResizeMove, handleResizeEnd]);
 
   // Mettre à jour les décorations d'erreur
   const updateErrorDecorations = (editor, monaco) => {
@@ -191,9 +237,9 @@ export default function CodeEditor({
             </div>
 
             {/* Onglet éditeur */}
-            <TabsContent value="editor" className="mt-0 border rounded-lg overflow-hidden" style={{ height: '500px' }}>
+            <TabsContent value="editor" className="mt-0 border rounded-lg overflow-hidden relative" style={{ height: `${editorHeight}px` }}>
               <Editor
-                height="500px"
+                height={`${editorHeight}px`}
                 defaultLanguage="html"
                 value={userCode || initialCode}
                 onChange={onCodeChange}
@@ -201,14 +247,22 @@ export default function CodeEditor({
                 options={editorOptions}
                 theme="vs-dark"
               />
+              {/* Contrôleur de redimensionnement */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-2 bg-border hover:bg-primary/50 cursor-ns-resize transition-colors flex items-center justify-center group"
+                onMouseDown={handleResizeStart}
+                style={{ zIndex: 10 }}
+              >
+                <GripVertical className="w-4 h-4 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
             </TabsContent>
 
             {/* Onglet solution (protégé) */}
-            <TabsContent value="solution" className="mt-0" style={{ height: '500px' }}>
+            <TabsContent value="solution" className="mt-0 relative" style={{ height: `${editorHeight}px` }}>
               {showCorrectCode ? (
-                <div className="border rounded-lg overflow-hidden" style={{ height: '500px' }}>
+                <div className="border rounded-lg overflow-hidden relative" style={{ height: `${editorHeight}px` }}>
                   <Editor
-                    height="500px"
+                    height={`${editorHeight}px`}
                     defaultLanguage="html"
                     value={correctCode}
                     options={{
@@ -217,9 +271,17 @@ export default function CodeEditor({
                     }}
                     theme="vs-dark"
                   />
+                  {/* Contrôleur de redimensionnement */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-2 bg-border hover:bg-primary/50 cursor-ns-resize transition-colors flex items-center justify-center group"
+                    onMouseDown={handleResizeStart}
+                    style={{ zIndex: 10 }}
+                  >
+                    <GripVertical className="w-4 h-4 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-center border rounded-lg bg-secondary/20" style={{ height: '500px' }}>
+                <div className="flex items-center justify-center border rounded-lg bg-secondary/20" style={{ height: `${editorHeight}px` }}>
                   <div className="text-center space-y-4 p-8 max-w-md">
                     <div className="w-16 h-16 mx-auto rounded-full bg-warning/20 flex items-center justify-center">
                       <Lock className="w-8 h-8 text-warning" />
